@@ -6,7 +6,7 @@ import 'package:news/myTheme.dart';
 import 'package:news/news/news_item.dart';
 
 class NewsContainer extends StatelessWidget {
-  Source source;
+Source source;
 
   NewsContainer({required this.source});
 

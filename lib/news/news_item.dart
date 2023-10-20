@@ -5,7 +5,7 @@ import 'package:news/model/NewsResponse.dart';
 import 'package:news/myTheme.dart';
 
 class NewsItem extends StatelessWidget {
-  News news;
+News news;
 
   NewsItem({required this.news});
 
