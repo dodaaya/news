@@ -76,7 +76,10 @@ class NewsContent extends StatelessWidget {
               alignment: Alignment.bottomRight,
               child: TextButton(
                 onPressed: () {
-                  news.url;
+                  //news.url
+                  const url =
+                      "https://markets.businessinsider.com/news/currencies/anthony-scaramucci-bitcoin-outlook-skybridge-capital-crypto-messari-mainnet-conference-2023-9";
+                  Uri.parse(url);
                 },
                 child: Text(
                   "View full article >",
