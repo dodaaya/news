@@ -15,7 +15,6 @@ class SourceResponse {
       });
     }
   }
-
   String? status;
   String? message;
   String? code;
@@ -59,7 +58,6 @@ class Source {
     language = json['language'];
     country = json['country'];
   }
-
   String? id;
   String? name;
   String? description;
@@ -79,4 +77,5 @@ class Source {
     map['country'] = country;
     return map;
   }
+
 }
