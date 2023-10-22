@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:news/api/api_manager.dart';
+import 'package:news/category/cat_det_VM.dart';
 import 'package:news/model/SourceResponse.dart';
 import 'package:news/model/categoryDM.dart';
 import 'package:news/myTheme.dart';
 import 'package:news/tabs/Tab_cont.dart';
+import 'package:provider/provider.dart';
 
 class CategoryDetails extends StatefulWidget {
   static const String routeName = 'cat_det';
@@ -16,9 +18,48 @@ class CategoryDetails extends StatefulWidget {
 }
 
 class _CategoryDetailsState extends State<CategoryDetails> {
+  CatDetVM viewModel = CatDetVM();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    viewModel.getSource(widget.categoryDM.id);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<SourceResponse?>(
+    return ChangeNotifierProvider(
+        create: (context) => viewModel,
+        child: Consumer<CatDetVM>(
+          builder: (context, viewModel, child) {
+            if (viewModel.errormsg != null) {
+              return Column(
+                children: [
+                  Text(viewModel.errormsg!),
+                  ElevatedButton(
+                      onPressed: () {
+                        viewModel.getSource(widget.categoryDM.id);
+                      },
+                      child: Text('try again'))
+                ],
+              );
+            } else if (viewModel.sourcesList == null) {
+              return Center(
+                child: CircularProgressIndicator(
+                  color: MyTheme.primaryLight,
+                ),
+              );
+            } else {
+              return TabContainer(
+                sourceslist: viewModel.sourcesList ?? [],
+              );
+            }
+          },
+          child: Text('header'),
+        ));
+
+    FutureBuilder<SourceResponse?>(
       future: ApiManager.getSources(widget.categoryDM.id),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
