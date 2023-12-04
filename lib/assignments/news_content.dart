@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:news/model/NewsResponse.dart';
 import 'package:news/myTheme.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class NewsContent extends StatelessWidget {
   static const String routeName = 'content';
@@ -52,6 +53,16 @@ class NewsContent extends StatelessWidget {
               height: 10,
             ),
             Text(
+              news.content ?? "",
+              style: Theme.of(context)
+                  .textTheme
+                  .titleSmall!
+                  .copyWith(fontSize: 15, color: MyTheme.greyColor),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Text(
               news.publishedAt ?? "",
               textAlign: TextAlign.end,
               style: Theme.of(context)
@@ -60,32 +71,23 @@ class NewsContent extends StatelessWidget {
                   .copyWith(fontSize: 14, color: MyTheme.greyColor),
             ),
             SizedBox(
-              height: 10,
-            ),
-            Text(
-              news.content ?? "",
-              style: Theme.of(context)
-                  .textTheme
-                  .titleSmall!
-                  .copyWith(fontSize: 15, color: MyTheme.greyColor),
-            ),
-            SizedBox(
-              height: 50,
+              height: 40,
             ),
             Container(
               alignment: Alignment.bottomRight,
-              child: TextButton(
+              child: TextButton.icon(
                 onPressed: () {
-                  //news.url
-                  const url =
-                      "https://markets.businessinsider.com/news/currencies/anthony-scaramucci-bitcoin-outlook-skybridge-capital-crypto-messari-mainnet-conference-2023-9";
-                  Uri.parse(url);
+                  _launchUrl(news.url ?? "");
                 },
-                child: Text(
-                  "View full article >",
+                label: Text(
+                  "View full article",
                   style: Theme.of(context).textTheme.titleMedium!.copyWith(
                       fontWeight: FontWeight.bold,
                       color: MyTheme.paragraphTitleColor),
+                ),
+                icon: Icon(
+                  Icons.play_arrow_rounded,
+                  color: MyTheme.paragraphTitleColor,
                 ),
               ),
             ),
@@ -93,5 +95,12 @@ class NewsContent extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> _launchUrl(String url) async {
+    var uri = Uri.parse(url);
+    if (!await launchUrl(uri)) {
+      throw Exception('Could not launch ${uri.path}');
+    }
   }
 }
