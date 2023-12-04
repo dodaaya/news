@@ -34,4 +34,18 @@ class ApiManager {
       throw (e);
     }
   }
+
+  static Future<NewsResponse?> searchNews(String query) async {
+//https://newsapi.org/v2/everything?q=bitcoin&apiKey=c36345bb98b44413aba608c9770954e0
+    Uri url = Uri.https(ApiConstants.baseUrl, ApiConstants.newseApi,
+        {'apiKey': 'c36345bb98b44413aba608c9770954e0', 'q': query});
+    try {
+      var response = await http.get(url);
+      var bodyString = response.body;
+      var json = jsonDecode(bodyString);
+      return NewsResponse.fromJson(json);
+    } catch (e) {
+      throw (e);
+    }
+  }
 }

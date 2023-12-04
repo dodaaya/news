@@ -39,14 +39,14 @@ class _HomeScreenState extends State<HomeScreen> {
                       : '${selectedCat?.title}',
               style: Theme.of(context).textTheme.titleLarge,
             ),
-            actions: <Widget>[
-              selectedCat != null
-                  ? IconButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, CategorySearch.routeName);
-                      },
-                      icon: Icon(Icons.search))
-                  : Container()
+            actions: [
+              IconButton(
+                  onPressed: () {
+                    showSearch(
+                        context: context, delegate: CategorySearchDelegate());
+                    // Navigator.pushNamed(context, CategorySearch.routeName);
+                  },
+                  icon: Icon(Icons.search))
             ],
           ),
           drawer: Drawer(
