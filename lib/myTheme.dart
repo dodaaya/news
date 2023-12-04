@@ -14,6 +14,10 @@ class MyTheme {
   static Color paragraphTitleColor = Color(0xff42505C);
 
   static ThemeData lightTheme = ThemeData(
+    inputDecorationTheme: InputDecorationTheme(
+        activeIndicatorBorder: BorderSide.none,
+        enabledBorder: OutlineInputBorder(borderSide: BorderSide.none),
+        focusedBorder: OutlineInputBorder(borderSide: BorderSide.none)),
     appBarTheme: AppBarTheme(
         backgroundColor: primaryLight,
         centerTitle: true,
@@ -25,9 +29,9 @@ class MyTheme {
       titleLarge:
           TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: white),
       titleMedium:
-          TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: black),
+      TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: black),
       titleSmall:
-          TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: black),
+      TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: black),
     ),
   );
 }
