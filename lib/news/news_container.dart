@@ -18,16 +18,37 @@ class NewsContainer extends StatefulWidget {
 
 class _NewsContainerState extends State<NewsContainer> {
   NewsContVM viewModel = NewsContVM();
+  final scrollController = ScrollController();
+  int pageNum = 1;
+  List<News> news = [];
+  bool loadNextPage = false;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    scrollController.addListener(() {
+      if (scrollController.position.atEdge) {
+        bool Top = scrollController.position.pixels == 0;
+        if (!Top) {
+          print('At bottom');
+          loadNextPage = true;
+          setState(() {});
+        }
+      }
+    });
     viewModel.getNewsBySrcId(widget.source.id ?? "");
   }
 
   @override
   Widget build(BuildContext context) {
+    if (loadNextPage) {
+      ApiManager.getNewsBySourceId(
+              sourceId: widget.source.id ?? "", pageNum: ++pageNum)
+          .then((NewsResponse) => news?.addAll(NewsResponse?.articles ?? []));
+      loadNextPage = false;
+      setState(() {});
+    }
     return ChangeNotifierProvider(
       create: (context) => viewModel,
       child: Consumer<NewsContVM>(
@@ -43,6 +64,23 @@ class _NewsContainerState extends State<NewsContainer> {
                     child: Text('try again'))
               ],
             );
+          } else if (viewModel.newsList != null) {
+            if (news.isEmpty) {
+              news = viewModel.newsList ?? [];
+            } else if (viewModel.newsList!.isNotEmpty &&
+                news.first.title != viewModel.newsList![0].title) {
+              news = viewModel.newsList ?? [];
+              scrollController.jumpTo(0);
+            }
+            print(news.length);
+            print(pageNum);
+            return ListView.builder(
+              controller: scrollController,
+              itemBuilder: (context, index) {
+                return NewsItem(news: news![index]);
+              },
+              itemCount: news?.length ?? 0,
+            );
           } else if (viewModel.newsList == null) {
             return Center(
               child: CircularProgressIndicator(
@@ -50,49 +88,50 @@ class _NewsContainerState extends State<NewsContainer> {
               ),
             );
           } else {
-            return ListView.builder(
-              itemBuilder: (context, index) {
-                return NewsItem(news: viewModel.newsList![index]);
-              },
-              itemCount: viewModel.newsList?.length ?? 0,
-            );
+            return Container();
           }
         },
       ),
     );
+  }
 
-    FutureBuilder<NewsResponse?>(
-        future: ApiManager.getNewsBySourceId(widget.source.id ?? ""),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-              child: CircularProgressIndicator(
-                color: MyTheme.primaryLight,
-              ),
-            );
-          } else if (snapshot.hasError) {
-            return Column(
-              children: [
-                Text('something went wrong'),
-                ElevatedButton(onPressed: () {}, child: Text('try again'))
-              ],
-            );
-          }
-          if (snapshot.data?.status != 'ok') {
-            return Column(
-              children: [
-                Text(snapshot.data?.message ?? ''),
-                ElevatedButton(onPressed: () {}, child: Text('try again'))
-              ],
-            );
-          }
-          var newsList = snapshot.data?.articles ?? [];
-          return ListView.builder(
-            itemBuilder: (context, index) {
-              return NewsItem(news: newsList[index]);
-            },
-            itemCount: newsList.length,
-          );
-        });
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    scrollController.dispose();
   }
 }
+// FutureBuilder<NewsResponse?>(
+//     future: ApiManager.getNewsBySourceId(sourceId:widget.source.id ?? ""),
+//     builder: (context, snapshot) {
+//       if (snapshot.connectionState == ConnectionState.waiting) {
+//         return Center(
+//           child: CircularProgressIndicator(
+//             color: MyTheme.primaryLight,
+//           ),
+//         );
+//       } else if (snapshot.hasError) {
+//         return Column(
+//           children: [
+//             Text('something went wrong'),
+//             ElevatedButton(onPressed: () {}, child: Text('try again'))
+//           ],
+//         );
+//       }
+//       if (snapshot.data?.status != 'ok') {
+//         return Column(
+//           children: [
+//             Text(snapshot.data?.message ?? ''),
+//             ElevatedButton(onPressed: () {}, child: Text('try again'))
+//           ],
+//         );
+//       }
+//       var newsList = snapshot.data?.articles ?? [];
+//       return ListView.builder(
+//         itemBuilder: (context, index) {
+//           return NewsItem(news: newsList[index]);
+//         },
+//         itemCount: newsList.length,
+//       );
+//     });
+//

@@ -11,7 +11,8 @@ class NewsContVM extends ChangeNotifier {
     errmsg = null;
     notifyListeners();
     try {
-      var response = await ApiManager.getNewsBySourceId(srcId);
+      var response =
+          await ApiManager.getNewsBySourceId(sourceId: srcId, pageNum: 1);
       if (response?.status == 'error') {
         errmsg = response?.message;
       } else {

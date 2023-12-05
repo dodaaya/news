@@ -21,10 +21,15 @@ class ApiManager {
     }
   }
 
-  static Future<NewsResponse?> getNewsBySourceId(String sourceId) async {
+  static Future<NewsResponse?> getNewsBySourceId(
+      {required String sourceId, int pageNum = 1}) async {
     //https://newsapi.org/v2/everything?q=bitcoin&apiKey=c36345bb98b44413aba608c9770954e0
-    Uri url = Uri.https(ApiConstants.baseUrl, ApiConstants.newseApi,
-        {'apiKey': 'c36345bb98b44413aba608c9770954e0', 'sources': sourceId});
+    Uri url = Uri.https(ApiConstants.baseUrl, ApiConstants.newseApi, {
+      'apiKey': 'c36345bb98b44413aba608c9770954e0',
+      'sources': sourceId,
+      'pageSize': '20',
+      'page': '$pageNum'
+    });
     try {
       var response = await http.get(url);
       var bodyString = response.body;
