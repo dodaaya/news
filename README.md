@@ -4,7 +4,7 @@ A Flutter-based news application that leverages the News API to fetch and displa
 Features
 1.Categories Screen:
 Users can choose a news category from a GridView. Each category is displayed with an image and name.
-<img src="//github.com/dodaaya/news/assets/133582421/a072f19a-87b5-4d41-b23a-5641a6edfd09" alt="Description" width="200"/>
+<img src="//github.com/dodaaya/news/assets/133582421/a072f19a-87b5-4d41-b23a-5641a6edfd09" width="200"/>
 
 2.Navigation Drawer:
 Allows users to navigate to the Categories screen or Settings screen.
