@@ -30,9 +30,11 @@ Users can explore news by categories, sources, or search for specific topics.
 9. **Article Details Screen**:
    Shows detailed information about a selected article.
    Users can open the full article in their default browser by clicking "View Article".
+   
    <img src="https://github.com/dodaaya/news/assets/133582421/40e68a63-9256-44b2-a4b2-d510e5a8a149" alt="Article Details Screen" width="300"/>
 
-10. **Settings Screen**:
+11. **Settings Screen**:
    Users can select the language and theme mode of the app.
+
    <img src="https://github.com/dodaaya/news/assets/133582421/33d23121-30d0-45ce-abc6-be81c63bd153" alt="Settings Screen" width="300"/>
 
